@@ -1,0 +1,509 @@
+<title>Curata — Spec v0.1</title>
+<style>
+  :root{
+    --bg:#F7F6F4; --surface:#FFFFFF; --text:#111111; --text-2:#8A8A8E;
+    --border:#E8E7E4; --pill-bg:#111111; --pill-text:#FFFFFF;
+    --shadow:0 1px 3px rgba(0,0,0,.06);
+    --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    --sans: -apple-system, "SF Pro Rounded", "Segoe UI", Roboto, Inter, sans-serif;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#141413; --surface:#1E1E1C; --text:#F2F1EE; --text-2:#8F8D88;
+      --border:#2C2B27; --pill-bg:#F2F1EE; --pill-text:#141413;
+      --shadow:0 1px 3px rgba(0,0,0,.35);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#141413; --surface:#1E1E1C; --text:#F2F1EE; --text-2:#8F8D88;
+    --border:#2C2B27; --pill-bg:#F2F1EE; --pill-text:#141413;
+    --shadow:0 1px 3px rgba(0,0,0,.35);
+  }
+  :root[data-theme="light"]{
+    --bg:#F7F6F4; --surface:#FFFFFF; --text:#111111; --text-2:#8A8A8E;
+    --border:#E8E7E4; --pill-bg:#111111; --pill-text:#FFFFFF;
+    --shadow:0 1px 3px rgba(0,0,0,.06);
+  }
+
+  *{box-sizing:border-box;}
+  body{background:var(--bg); color:var(--text); font-family:var(--sans); margin:0; -webkit-font-smoothing:antialiased;}
+  .wrap{max-width:840px; margin:0 auto; padding:48px 24px 96px; display:flex; flex-direction:column; gap:28px;}
+
+  .topbar{display:flex; align-items:center; justify-content:space-between; padding-bottom:20px; border-bottom:1px solid var(--border);}
+  .word{font-size:15px; font-weight:600; letter-spacing:-.01em;}
+  .word span{color:var(--text-2); font-weight:400;}
+  .slug{font-family:var(--mono); font-size:12px; color:var(--text-2);}
+
+  .hero h1{font-size:30px; font-weight:600; letter-spacing:-.02em; line-height:1.15; margin:0 0 8px; text-wrap:balance;}
+  .hero p{font-size:14px; line-height:1.6; color:var(--text-2); margin:0; max-width:60ch;}
+
+  .tabs{display:flex; gap:8px; position:sticky; top:16px; z-index:5;}
+  .tab{font-family:inherit; font-size:13px; font-weight:500; padding:9px 18px; border-radius:24px; border:1px solid var(--border); background:var(--surface); color:var(--text); cursor:pointer; transition:background .15s ease, color .15s ease;}
+  .tab[aria-selected="true"]{background:var(--pill-bg); color:var(--pill-text); border-color:transparent;}
+  .tab:focus-visible{outline:2px solid var(--text-2); outline-offset:2px;}
+
+  .panel{display:none; flex-direction:column; gap:36px;}
+  .panel.active{display:flex;}
+
+  section.block{display:flex; flex-direction:column; gap:14px;}
+  .block h2{font-size:13px; font-weight:600; text-transform:uppercase; letter-spacing:.06em; color:var(--text-2); margin:0;}
+  .block h3{font-size:17px; font-weight:600; letter-spacing:-.01em; margin:0 0 2px;}
+  .block p{font-size:14px; line-height:1.65; color:var(--text-2); margin:0; max-width:66ch;}
+  .block p.lede{color:var(--text); font-size:15px;}
+
+  .card{background:var(--surface); border-radius:20px; padding:22px 24px; box-shadow:var(--shadow); display:flex; flex-direction:column; gap:10px;}
+  .card-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:14px;}
+
+  ul.plain{margin:0; padding:0; list-style:none; display:flex; flex-direction:column;}
+  ul.plain li{padding:12px 0; border-bottom:1px solid var(--border); font-size:14px; line-height:1.6; color:var(--text);}
+  ul.plain li:last-child{border-bottom:none;}
+  ul.plain li b{font-weight:500;}
+  ul.plain li .tag{display:inline-block; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.04em; color:var(--text-2); margin-left:8px;}
+
+  .story{padding:12px 0; border-bottom:1px solid var(--border); font-size:14px; line-height:1.6;}
+  .story:last-child{border-bottom:none;}
+  .story b{font-weight:500;}
+
+  table{width:100%; border-collapse:collapse; font-size:13.5px;}
+  th{text-align:left; font-weight:600; color:var(--text-2); font-size:12px; text-transform:uppercase; letter-spacing:.04em; padding:0 12px 10px 0; border-bottom:1px solid var(--border);}
+  td{padding:12px 12px 12px 0; border-bottom:1px solid var(--border); vertical-align:top; line-height:1.5;}
+  tr:last-child td{border-bottom:none;}
+  .twrap{overflow-x:auto;}
+  td.mono, .mono{font-family:var(--mono); font-size:12.5px; color:var(--text-2);}
+
+  .swatches{display:flex; flex-wrap:wrap; gap:14px;}
+  .swatch{display:flex; flex-direction:column; gap:8px; width:104px;}
+  .sw-chip{height:56px; border-radius:12px; border:1px solid var(--border);}
+  .sw-label{font-size:11.5px; color:var(--text-2); font-family:var(--mono);}
+
+  .badge{display:inline-flex; align-items:center; justify-content:center; min-width:24px; height:24px; padding:0 8px; border-radius:12px; background:var(--pill-bg); color:var(--pill-text); font-size:11px; font-weight:600; flex:none;}
+  .screen-card{display:flex; gap:14px; align-items:flex-start;}
+  .screen-card .stext h4{margin:0 0 4px; font-size:14.5px; font-weight:500;}
+  .screen-card .stext p{margin:0; font-size:13.5px; color:var(--text-2); line-height:1.55;}
+
+  .priority-head{display:flex; align-items:baseline; gap:10px;}
+  .priority-head .p-badge{font-family:var(--mono); font-size:11px; color:var(--text-2); border:1px solid var(--border); border-radius:6px; padding:2px 6px;}
+
+  footer{padding-top:24px; border-top:1px solid var(--border); font-size:12.5px; color:var(--text-2); font-family:var(--mono);}
+
+  .surface-card{background:var(--surface); border-radius:20px; padding:22px 24px; box-shadow:var(--shadow); display:flex; flex-direction:column; gap:12px;}
+  .surface-head{display:flex; align-items:baseline; gap:10px; flex-wrap:wrap;}
+  .surface-head h3{margin:0; font-size:16px; font-weight:600; letter-spacing:-.01em;}
+  .surface-head span.purpose{font-size:13px; color:var(--text-2);}
+  .surface-reqs{display:flex; flex-direction:column; gap:6px;}
+  .req-row{display:flex; gap:10px; align-items:flex-start; font-size:13.5px; line-height:1.55;}
+  .req-row .p-badge{margin-top:1px;}
+  .surface-story{font-size:13.5px; color:var(--text-2); line-height:1.55; padding-top:8px; border-top:1px solid var(--border);}
+  .surface-story b{color:var(--text); font-weight:500;}
+
+  pre.code{background:var(--surface); border-radius:16px; padding:18px 20px; box-shadow:var(--shadow); overflow-x:auto; margin:0;}
+  pre.code code{font-family:var(--mono); font-size:12.5px; line-height:1.7; color:var(--text); white-space:pre;}
+  pre.code .kw{color:var(--text-2);}
+
+  .ph{background:repeating-linear-gradient(135deg, var(--border) 0 7px, transparent 7px 14px); background-color:var(--bg);}
+  .comp-preview{display:flex; gap:18px; flex-wrap:wrap; align-items:flex-end;}
+  .comp-card{width:120px; display:flex; flex-direction:column; gap:8px;}
+  .comp-card .ph{aspect-ratio:2/3; border-radius:14px;}
+  .comp-card.wide{width:150px;}
+  .comp-card.wide .ph{aspect-ratio:4/3; border-radius:14px;}
+  .comp-card .ct{font-size:12.5px; font-weight:500;}
+  .comp-card .cm{font-size:11.5px; color:var(--text-2);}
+  .comp-pill{display:inline-flex; align-items:center; gap:10px; background:var(--pill-bg); border-radius:24px; padding:7px 7px 7px 16px;}
+  .comp-pill span.u{font-family:var(--mono); font-size:12.5px; color:var(--pill-text); opacity:.6;}
+  .comp-pill span.cta{background:var(--pill-text); color:var(--pill-bg); font-size:11.5px; font-weight:500; padding:8px 14px; border-radius:18px;}
+  .comp-list-row{display:flex; align-items:center; justify-content:space-between; padding:10px 14px; border:1px solid var(--border); border-radius:12px; width:220px;}
+  .comp-list-row .n{font-size:13px;} .comp-list-row .c{font-size:12px; color:var(--text-2);}
+
+  .sync-note{display:flex; align-items:center; gap:8px; font-size:12px; color:var(--text-2); background:var(--surface); border:1px solid var(--border); border-radius:24px; padding:6px 14px; width:fit-content;}
+  .sync-note .dot{width:6px; height:6px; border-radius:50%; background:var(--text-2);}
+
+  @media (max-width:520px){
+    .wrap{padding:32px 16px 72px;}
+    .hero h1{font-size:25px;}
+    .tabs{overflow-x:auto; -webkit-overflow-scrolling:touch;}
+  }
+</style>
+
+<div class="wrap">
+
+  <div class="topbar">
+    <div class="word">Curata <span>/ spec</span></div>
+    <div class="slug">v0.1 &middot; curata.co</div>
+  </div>
+
+  <div class="hero">
+    <h1>One page for what you love — spec v0.1</h1>
+    <p>Public taste profiles for movies, TV shows, and restaurants. Built from the problem statement, <span class="mono">design.md</span>, and wireframes 1a&ndash;1d.</p>
+  </div>
+
+  <div class="tabs" role="tablist" aria-label="Spec sections">
+    <button class="tab" role="tab" id="tab-product" aria-selected="true" aria-controls="panel-product">Product</button>
+    <button class="tab" role="tab" id="tab-design" aria-selected="false" aria-controls="panel-design">Design</button>
+    <button class="tab" role="tab" id="tab-tech" aria-selected="false" aria-controls="panel-tech">Tech</button>
+  </div>
+
+  <!-- PRODUCT -->
+  <div class="panel active" id="panel-product" role="tabpanel" aria-labelledby="tab-product">
+
+    <section class="block">
+      <h2>Problem</h2>
+      <p class="lede">Taste in film, TV, and food is fragmented across single-category apps (Letterboxd, Trakt, Yelp) with no single place to express "what I love" across all three, and no quick way to hand that to a friend.</p>
+      <p><b style="color:var(--text); font-weight:500;">Who it's for:</b> people who already track or think about their taste in these categories and want one page to point people to — not a new social network to build a following on.</p>
+    </section>
+
+    <section class="block">
+      <h2>Goals</h2>
+      <ul class="plain">
+        <li>A new user can publish a page with favorites in all three categories in under ~10 minutes.</li>
+        <li>A visitor with no account can land on a page and walk away with one usable recommendation.</li>
+        <li>Owners come back to add or update favorites at least monthly &mdash; the page stays alive, not a one-time snapshot.</li>
+      </ul>
+    </section>
+
+    <section class="block">
+      <h2>Non-goals</h2>
+      <ul class="plain">
+        <li><b>Not a social feed</b> &mdash; no likes, comments, follows, or activity stream.</li>
+        <li><b>Not a star-rating system</b> &mdash; one-sentence reviews only, no numeric scoring.</li>
+        <li><b>Not collaborative</b> &mdash; single-owner pages in v1, no shared/multi-editor lists.</li>
+        <li><b>Not a recommendation engine</b> &mdash; no algorithmic "you might also like."</li>
+      </ul>
+    </section>
+
+    <section class="block">
+      <h2>Decisions locked</h2>
+      <ul class="plain">
+        <li><b>Profile layout: 1a</b> (full-width grid, stacked sections) &mdash; simplest build, collapses to mobile without a separate layout.</li>
+        <li><b>Landing layout: 1d</b> (poster-wall hero) &mdash; leads with visuals. <i style="color:var(--text-2); font-style:normal;">Dependency: needs a fully curated seed profile (18 real posters) before it looks finished &mdash; gates when Landing can ship.</i></li>
+        <li><b>Follow &mdash; cut.</b> No follow/notification feature; matches the not-a-social-feed non-goal.</li>
+        <li><b>One login = one profile</b> for v1 (no multi-profile accounts).</li>
+        <li><b>Usernames are immutable</b> once claimed &mdash; no rename.</li>
+        <li><b>Zero favorites is a valid published state</b> &mdash; no minimum content gate at claim.</li>
+      </ul>
+    </section>
+
+    <section class="block">
+      <h2>Surfaces</h2>
+      <p>Requirements and stories are scoped per surface, so a new one (mobile, embed widget, API) slots in later without rewriting the rest.</p>
+
+      <div class="surface-card">
+        <div class="surface-head"><span class="badge" style="background:transparent; color:var(--text-2); border:1px solid var(--border);">1</span><h3>Landing</h3><span class="purpose">public, unauthenticated &mdash; converts visitors into claimed pages, ships as 1d</span></div>
+        <div class="surface-reqs">
+          <div class="req-row"><span class="p-badge">P0</span><span>Poster-wall hero (18 curated posters), headline + one-line pitch, claim CTA (username + email)</span></div>
+          <div class="req-row"><span class="p-badge">P1</span><span>3-step explainer, reviews/lists strip below the fold</span></div>
+        </div>
+        <div class="surface-story"><b>Story:</b> as a visitor, I understand what Curata is and can claim a username in one step.</div>
+      </div>
+
+      <div class="surface-card">
+        <div class="surface-head"><span class="badge" style="background:transparent; color:var(--text-2); border:1px solid var(--border);">2</span><h3>Claim &amp; Onboarding</h3><span class="purpose">gets a new owner from claim to published page</span></div>
+        <div class="surface-reqs">
+          <div class="req-row"><span class="p-badge">P0</span><span>Username availability check (immutable once set), magic-link verification, guided add-first-favorites step (optional)</span></div>
+          <div class="req-row"><span class="p-badge">P1</span><span>Progress indicator ("12 is enough")</span></div>
+        </div>
+        <div class="surface-story"><b>Story:</b> as a new owner, I claim my username and can publish immediately, even with zero favorites.</div>
+      </div>
+
+      <div class="surface-card">
+        <div class="surface-head"><span class="badge" style="background:transparent; color:var(--text-2); border:1px solid var(--border);">3</span><h3>Public Profile</h3><span class="purpose">curata.co/{username} &mdash; the shareable artifact itself, ships as 1a</span></div>
+        <div class="surface-reqs">
+          <div class="req-row"><span class="p-badge">P0</span><span>Identity block, three category sections (Movies/TV/Restaurants), copy-link share</span></div>
+          <div class="req-row"><span class="p-badge">P1</span><span>Lists, saved-for-later (restaurants only), recent reviews</span></div>
+        </div>
+        <div class="surface-story"><b>Story:</b> as a visitor, I view a page with no login and get one usable recommendation.</div>
+      </div>
+
+      <div class="surface-card">
+        <div class="surface-head"><span class="badge" style="background:transparent; color:var(--text-2); border:1px solid var(--border);">4</span><h3>Editor</h3><span class="purpose">authenticated, owner-only &mdash; add/edit favorites, reviews, lists</span></div>
+        <div class="surface-reqs">
+          <div class="req-row"><span class="p-badge">P0</span><span>Search-and-add flow (TMDB / Places), one-sentence review field (280 char cap), edit/delete</span></div>
+          <div class="req-row"><span class="p-badge">P1</span><span>Create/manage lists, toggle saved-for-later (restaurants only)</span></div>
+          <div class="req-row"><span class="p-badge">P2</span><span>Manual cover-image override</span></div>
+        </div>
+        <div class="surface-story"><b>Story:</b> as an owner, I search a title once and get poster art + metadata auto-filled.</div>
+      </div>
+    </section>
+
+    <section class="block">
+      <h2>Success metrics</h2>
+      <div class="card-grid">
+        <div class="card">
+          <h3 style="font-size:14.5px;">Leading</h3>
+          <p>% of claimed pages with &ge;1 favorite per category within 24h. Median time-to-publish (target &lt;10 min).</p>
+        </div>
+        <div class="card">
+          <h3 style="font-size:14.5px;">Lagging</h3>
+          <p>30-day return-and-edit rate. Shared-link click-through.</p>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- DESIGN -->
+  <div class="panel" id="panel-design" role="tabpanel" aria-labelledby="tab-design">
+
+    <section class="block">
+      <h2>Principle</h2>
+      <p class="lede">Quiet interface, loud cover art. Chrome stays neutral; every color on the page comes from posters, key art, and restaurant photography. No brand accent anywhere in the UI.</p>
+      <div class="sync-note"><span class="dot"></span>Rationale lives in design.md &mdash; this tab is the token/component source of truth (exact values, full list).</div>
+    </section>
+
+    <section class="block">
+      <h2>Style guide</h2>
+
+      <h3 style="font-size:14px;">Color</h3>
+      <div class="swatches">
+        <div class="swatch"><div class="sw-chip" style="background:#F7F6F4;"></div><span class="sw-label">bg #F7F6F4</span></div>
+        <div class="swatch"><div class="sw-chip" style="background:#FFFFFF;"></div><span class="sw-label">surface #FFF</span></div>
+        <div class="swatch"><div class="sw-chip" style="background:#111111;"></div><span class="sw-label" style="color:var(--text-2);">text #111111</span></div>
+        <div class="swatch"><div class="sw-chip" style="background:#8A8A8E;"></div><span class="sw-label">text-2 #8A8A8E</span></div>
+        <div class="swatch"><div class="sw-chip" style="background:#E8E7E4;"></div><span class="sw-label">border #E8E7E4</span></div>
+      </div>
+
+      <h3 style="font-size:14px; margin-top:6px;">Type</h3>
+      <div class="card" style="gap:14px;">
+        <div><div style="font-size:30px; font-weight:600; letter-spacing:-.02em;">Headline</div><span class="cm" style="color:var(--text-2); font-size:12px;">28&ndash;32px / 600, tight leading</span></div>
+        <div><div style="font-size:15px; font-weight:500;">Section label</div><span class="cm" style="color:var(--text-2); font-size:12px;">15px / 500</span></div>
+        <div><div style="font-size:14px; color:var(--text-2);">Body text sits here, gray and easy to skim.</div><span class="cm" style="color:var(--text-2); font-size:12px;">14px / 400, text-2</span></div>
+        <div><div style="font-size:13px; color:var(--text-2);">Metadata &middot; 2023 &middot; $$</div><span class="cm" style="color:var(--text-2); font-size:12px;">13px / 400, text-2</span></div>
+        <div><div class="mono" style="font-size:13px;">curata.co/juliet</div><span class="cm" style="color:var(--text-2); font-size:12px;">monospace, URL slug</span></div>
+      </div>
+
+      <div class="card-grid" style="margin-top:6px;">
+        <div class="card">
+          <h3 style="font-size:14px;">Spacing</h3>
+          <p style="margin:0;">8 / 12 / 16 / 20 / 24 / 32 / 40px scale. Outer margin 20px min. Section rhythm 32px.</p>
+        </div>
+        <div class="card">
+          <h3 style="font-size:14px;">Radius</h3>
+          <p style="margin:0;">12px small cards &middot; 16px poster/photo cards &middot; 20&ndash;24px containers &amp; pills.</p>
+        </div>
+        <div class="card">
+          <h3 style="font-size:14px;">Elevation</h3>
+          <p style="margin:0;">One shadow only, barely visible: <span class="mono">0 1px 3px rgba(0,0,0,.06)</span>. No heavier shadows; spacing does separation, not borders.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="block">
+      <h2>Wireframe variations</h2>
+      <div class="card" style="gap:0;">
+        <div class="screen-card" style="padding:14px 0; border-bottom:1px solid var(--border);">
+          <span class="badge">1a</span>
+          <div class="stext"><h4>Public profile &mdash; full-width grid <span style="color:var(--text-2); font-weight:400;">&middot; shipping v1</span></h4><p>Sections stacked top to bottom. Simplest to build; grid density set by a posterColumns prop.</p></div>
+        </div>
+        <div class="screen-card" style="padding:14px 0; border-bottom:1px solid var(--border); opacity:.55;">
+          <span class="badge" style="background:var(--border); color:var(--text-2);">1b</span>
+          <div class="stext"><h4>Public profile &mdash; identity rail <span style="font-weight:400;">&middot; explored, not building</span></h4><p>Sticky name/bio/nav rail + scrolling content. Its "Follow" pill is cut regardless (see Decisions locked).</p></div>
+        </div>
+        <div class="screen-card" style="padding:14px 0; border-bottom:1px solid var(--border); opacity:.55;">
+          <span class="badge" style="background:var(--border); color:var(--text-2);">1c</span>
+          <div class="stext"><h4>Landing &mdash; pitch + live profile <span style="font-weight:400;">&middot; explored, not building</span></h4><p>Pitch copy left, live example profile right. Explains the product before showing it.</p></div>
+        </div>
+        <div class="screen-card" style="padding:14px 0;">
+          <span class="badge">1d</span>
+          <div class="stext"><h4>Landing &mdash; poster-wall hero <span style="color:var(--text-2); font-weight:400;">&middot; shipping v1</span></h4><p>Full-width poster wall up top, pitch below. Blocked on a fully curated seed profile before it looks finished.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="block">
+      <h2>Component library</h2>
+
+      <div class="card">
+        <div class="comp-preview">
+          <div class="comp-card">
+            <div class="ph"></div>
+            <div class="ct">Past Lives</div>
+            <div class="cm">2023 &middot; Celine Song</div>
+          </div>
+          <div class="comp-card wide">
+            <div class="ph"></div>
+            <div class="ct">Snail Bar</div>
+            <div class="cm">&#9733; 4.7 &middot; $$ &middot; Wine bar</div>
+          </div>
+          <div class="comp-list-row">
+            <div><div class="n">Comfort rewatches</div><div class="cm">Nothing after 2012</div></div>
+            <div class="c">7</div>
+          </div>
+          <span class="comp-pill"><span class="u">curata.co/</span><span style="color:var(--pill-text); font-size:13px;">yourname</span><span class="cta">Claim</span></span>
+        </div>
+      </div>
+
+      <div class="twrap">
+        <table>
+          <thead><tr><th>Component</th><th>Spec</th></tr></thead>
+          <tbody>
+            <tr><td><b>Top bar</b></td><td>Wordmark left, one action right (Share on profile, Claim CTA on landing). No page title &mdash; the headline below carries it.</td></tr>
+            <tr><td><b>Identity block</b></td><td>Photo (44&ndash;56px radius circle), name (28&ndash;32px/600), one-line bio (14px gray), counts row (13px gray, &middot;-separated)</td></tr>
+            <tr><td><b>Category section</b></td><td>Section label (15px/500) + count (13px gray) on one baseline, then a card grid</td></tr>
+            <tr><td><b>Movie/TV card</b></td><td>2:3 poster, 16px radius, title (15px/500) + meta (13px gray) below or as bottom gradient-scrim overlay</td></tr>
+            <tr><td><b>Restaurant card</b></td><td>4:3 photo, 16px radius, title + rating/price/cuisine (structured fields, not one string) + one-line note</td></tr>
+            <tr><td><b>Saved item</b> <i style="color:var(--text-2); font-style:normal;">(restaurants only)</i></td><td>4:3 photo, 12px radius, title (13px) + cuisine/city meta (12px gray) &mdash; no rating shown, since it hasn't been visited yet</td></tr>
+            <tr><td><b>Review row</b></td><td>2:3 thumbnail (56px wide) + title/meta baseline + quote (14px gray), hairline divider below</td></tr>
+            <tr><td><b>List row</b></td><td>Name (15px) + meta (13px gray) left, count (13px gray) right, hairline divider</td></tr>
+            <tr><td><b>Claim / search pill</b></td><td>Full-width black pill, mono curata.co/ prefix, white input text, white CTA chip inset right</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- TECH -->
+  <div class="panel" id="panel-tech" role="tabpanel" aria-labelledby="tab-tech">
+
+    <section class="block">
+      <h2>Architecture</h2>
+      <p class="lede">Public profile pages are read-mostly and meant to be shared as links &mdash; favor server-rendered or statically generated pages per profile for load speed and link previews (OG image/title). A separate authenticated editor surface handles adding/editing favorites, reviews, and lists.</p>
+    </section>
+
+    <section class="block">
+      <h2>Tech stack</h2>
+      <div class="twrap">
+        <table>
+          <thead><tr><th>Layer</th><th>Choice</th></tr></thead>
+          <tbody>
+            <tr><td>Framework</td><td>Next.js (React, App Router) &mdash; one codebase for landing, public profile, and editor</td></tr>
+            <tr><td>Styling</td><td>Tailwind CSS, tokens mapped to the Design style guide</td></tr>
+            <tr><td>Database</td><td>Postgres (via Supabase)</td></tr>
+            <tr><td>Auth</td><td>Supabase Auth, magic-link email (passwordless)</td></tr>
+            <tr><td>Storage/CDN</td><td>Supabase Storage, caching fetched poster/photo assets</td></tr>
+            <tr><td>Hosting</td><td>Vercel &mdash; path-based routing (curata.co/username)</td></tr>
+            <tr><td>External APIs</td><td>TMDB (movies/TV), Google Places API (restaurants)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="block">
+      <h2>Tradeoffs</h2>
+      <div class="twrap">
+        <table>
+          <thead><tr><th>Decision</th><th>Choice</th><th>Alternative</th><th>Why</th></tr></thead>
+          <tbody>
+            <tr><td>Rendering</td><td>Next.js SSR/SSG</td><td>Client-only SPA</td><td>Public profiles need fast load + OG link previews for sharing &mdash; a bare SPA can't do that</td></tr>
+            <tr><td>Backend</td><td>Supabase (DB+Auth+Storage managed together)</td><td>Custom API + separate auth provider</td><td>Fewer moving parts for one person building with AI-assisted tooling to wire up and operate</td></tr>
+            <tr><td>Restaurant data</td><td>Google Places API</td><td>Yelp Fusion</td><td>Broader global coverage (Lisbon/Oakland-style cross-city use); revisit if photo cost is prohibitive</td></tr>
+            <tr><td>Profile ownership</td><td>One login = one profile (profiles.user_id unique)</td><td>Multi-profile per account</td><td>Simpler auth and schema for v1; revisit if people want multiple curated pages under one login</td></tr>
+            <tr><td>Restaurant metadata</td><td>Structured restaurant_details table</td><td>Single opaque meta string</td><td>Enables sorting/filtering by rating, price, or cuisine later without a migration</td></tr>
+            <tr><td>Saved-for-later</td><td>Boolean flag on favorite_items, restaurants only</td><td>Applies to all categories</td><td>Movies/TV already have Lists as a "to-watch" bucket; restaurants need a lightweight want-to-try queue Lists don't cover</td></tr>
+            <tr><td>Hosting</td><td>Vercel</td><td>Self-hosted (Docker/Fly.io)</td><td>Zero-ops deploys pair naturally with Next.js; revisit only if cost or limits bite</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="block">
+      <h2>Data schema</h2>
+      <pre class="code"><code>create table profiles (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid unique not null references auth.users(id) on delete cascade,
+  username text unique not null,       -- immutable once claimed, no rename
+  display_name text not null,
+  avatar_url text,
+  location text,
+  bio text,
+  created_at timestamptz not null default now()
+);
+
+create type favorite_category as enum ('movie', 'tv', 'restaurant');
+create type favorite_source as enum ('tmdb', 'places');
+
+create table favorite_items (
+  id uuid primary key default gen_random_uuid(),
+  profile_id uuid not null references profiles(id) on delete cascade,
+  category favorite_category not null,
+  external_source favorite_source not null,
+  external_ref text not null,          -- TMDB id / Google Place id
+  title text not null,
+  meta text,                           -- movie/tv only: "2023 &middot; Celine Song"
+  image_url text,
+  is_saved boolean not null default false,   -- saved-for-later; restaurants only
+  created_at timestamptz not null default now(),
+  unique (profile_id, external_source, external_ref),
+  check (is_saved = false or category = 'restaurant')
+);
+
+create table restaurant_details (
+  favorite_item_id uuid primary key references favorite_items(id) on delete cascade,
+  rating numeric(2,1),
+  price_level smallint check (price_level between 1 and 4),
+  cuisine text,
+  city text
+);
+
+create table reviews (
+  id uuid primary key default gen_random_uuid(),
+  favorite_item_id uuid not null references favorite_items(id) on delete cascade,
+  body varchar(280) not null,
+  created_at timestamptz not null default now()
+);
+
+create table lists (
+  id uuid primary key default gen_random_uuid(),
+  profile_id uuid not null references profiles(id) on delete cascade,
+  name text not null,
+  updated_at timestamptz not null default now()
+);
+
+create table list_items (
+  list_id uuid not null references lists(id) on delete cascade,
+  favorite_item_id uuid not null references favorite_items(id) on delete cascade,
+  primary key (list_id, favorite_item_id)
+);</code></pre>
+    </section>
+
+    <section class="block">
+      <h2>Integrations</h2>
+      <ul class="plain">
+        <li><b>Movie/TV metadata + poster/key art</b> &mdash; TMDB API</li>
+        <li><b>Restaurant metadata + photos</b> &mdash; Google Places API</li>
+        <li><b>Image cache/CDN layer</b> &mdash; for fetched poster/photo assets; don't hotlink, respect API image-caching terms</li>
+        <li><b>Auth</b> &mdash; passwordless magic-link email for claiming and editing a page, matching the no-friction claim flow in the wireframes</li>
+      </ul>
+    </section>
+
+    <section class="block">
+      <h2>Build plan</h2>
+      <div class="twrap">
+        <table>
+          <thead><tr><th>Phase</th><th>Scope</th><th>Surfaces touched</th></tr></thead>
+          <tbody>
+            <tr><td>0 &mdash; Foundation</td><td>Repo scaffold, Supabase project + schema migration, auth wiring, Tailwind theme from the style guide</td><td>&mdash;</td></tr>
+            <tr><td>1 &mdash; Claim + Profile skeleton</td><td>Username claim (immutable), magic-link verification, empty-state public profile render (1a) &mdash; publishable at zero favorites</td><td>Claim &amp; Onboarding, Public Profile</td></tr>
+            <tr><td>2 &mdash; Editor core</td><td>TMDB + Places search-and-add, structured restaurant fields, one-sentence review field (280 char), edit/delete</td><td>Editor</td></tr>
+            <tr><td>3 &mdash; Landing</td><td>Curate the seed profile's 18 posters first, then ship 1d, 3-step explainer wired to real claim flow</td><td>Landing</td></tr>
+            <tr><td>4 &mdash; Lists &amp; saved</td><td>List CRUD, saved-for-later toggle (restaurants only), recent-reviews ordering</td><td>Public Profile, Editor</td></tr>
+            <tr><td>5 &mdash; Polish &amp; P2s</td><td>Manual cover-image override</td><td>Editor</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="block">
+      <h2>Open questions</h2>
+      <ul class="plain">
+        <li>Username/slug collision handling and moderation policy <span class="tag">tech</span></li>
+        <li>TMDB API terms for this use case (commercial display of poster art) <span class="tag">tech / legal</span></li>
+        <li>Google Places photo-usage/cost terms at scale <span class="tag">tech</span></li>
+      </ul>
+    </section>
+
+  </div>
+
+  <footer>curata / spec.md / v0.1</footer>
+</div>
+
+<script>
+  var tabs = document.querySelectorAll('.tab');
+  tabs.forEach(function(tab){
+    tab.addEventListener('click', function(){
+      tabs.forEach(function(t){ t.setAttribute('aria-selected','false'); });
+      document.querySelectorAll('.panel').forEach(function(p){ p.classList.remove('active'); });
+      tab.setAttribute('aria-selected','true');
+      document.getElementById(tab.getAttribute('aria-controls')).classList.add('active');
+    });
+  });
+</script>

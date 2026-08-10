@@ -1,0 +1,68 @@
+@import "tailwindcss";
+
+/* Curata design tokens — mirrors spec.md § Design → Style guide.
+   Token name mapping: bg, surface, text→ink, text-2→ink-2, border→line, pill/pill-text→pill/pill-ink */
+:root {
+  --bg: #f7f6f4;
+  --surface: #ffffff;
+  --ink: #111111;
+  --ink-2: #8a8a8e;
+  --line: #e8e7e4;
+  --pill: #111111;
+  --pill-ink: #ffffff;
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #141413;
+    --surface: #1e1e1c;
+    --ink: #f2f1ee;
+    --ink-2: #8f8d88;
+    --line: #2c2b27;
+    --pill: #f2f1ee;
+    --pill-ink: #141413;
+    --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.35);
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg: #141413;
+  --surface: #1e1e1c;
+  --ink: #f2f1ee;
+  --ink-2: #8f8d88;
+  --line: #2c2b27;
+  --pill: #f2f1ee;
+  --pill-ink: #141413;
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.35);
+}
+
+:root[data-theme="light"] {
+  --bg: #f7f6f4;
+  --surface: #ffffff;
+  --ink: #111111;
+  --ink-2: #8a8a8e;
+  --line: #e8e7e4;
+  --pill: #111111;
+  --pill-ink: #ffffff;
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-line: var(--line);
+  --color-pill: var(--pill);
+  --color-pill-ink: var(--pill-ink);
+  --shadow-card: var(--shadow-card);
+  --font-sans: -apple-system, "SF Pro Rounded", "Segoe UI", Roboto, Inter, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+}

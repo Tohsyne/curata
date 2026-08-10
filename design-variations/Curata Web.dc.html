@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  body { margin:0; background:#EFEEEB; font-family:"Public Sans", -apple-system, "Segoe UI", sans-serif; -webkit-font-smoothing:antialiased; }
+  a { color:#111111; text-decoration:none; }
+  a:hover { color:#8A8A8E; }
+  ::-webkit-scrollbar { height:6px; width:6px; }
+  ::-webkit-scrollbar-thumb { background:#E0DFDB; border-radius:3px; }
+</style>
+</helmet>
+
+<section style="padding:64px 64px 96px; display:flex; flex-direction:column; gap:40px">
+  <div style="display:flex; align-items:baseline; gap:16px; font-size:13px; color:#8A8A8E; letter-spacing:.04em; text-transform:uppercase">
+    <span style="color:#111111; font-weight:600">Turn 1 · Curata web</span>
+    <span>Public profile <a href="#1a">1a</a> <a href="#1b">1b</a> · Landing <a href="#1c">1c</a> <a href="#1d">1d</a></span>
+  </div>
+
+  <div style="display:flex; flex-wrap:wrap; gap:56px; align-items:flex-start">
+
+    <!-- ================= 1a — Public profile, grid ================= -->
+    <div id="1a" style="width:1080px; display:flex; flex-direction:column; gap:14px">
+      <div style="display:flex; align-items:center; gap:10px">
+        <span style="display:inline-flex; align-items:center; justify-content:center; min-width:26px; height:26px; padding:0 9px; border-radius:13px; background:#111111; color:#FFFFFF; font-size:12px; font-weight:600">1a</span>
+        <span style="font-size:14px; color:#111111; font-weight:500">Public profile — full-width grid, sections stacked</span>
+      </div>
+
+      <div style="background:#F7F6F4; border-radius:24px; overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,.06)">
+        <div style="display:flex; align-items:center; justify-content:space-between; padding:22px 40px; border-bottom:1px solid #E8E7E4">
+          <span style="font-size:15px; font-weight:600; color:#111111; letter-spacing:-.01em">Curata</span>
+          <div style="display:flex; gap:10px; align-items:center">
+            <span style="font-size:13px; color:#8A8A8E">curata.co/juliet</span>
+            <span style="padding:8px 16px; border-radius:24px; background:#111111; color:#FFFFFF; font-size:13px; font-weight:500">Share</span>
+          </div>
+        </div>
+
+        <div style="padding:44px 40px 56px; display:flex; flex-direction:column; gap:44px">
+          <div style="display:flex; gap:24px; align-items:flex-start">
+            <div style="width:88px; height:88px; border-radius:44px; flex:none; background:repeating-linear-gradient(135deg,#EDECE9 0 7px,#F4F3F0 7px 14px); display:flex; align-items:center; justify-content:center; font:10px ui-monospace,Menlo,monospace; color:#8A8A8E">photo</div>
+            <div style="display:flex; flex-direction:column; gap:10px; max-width:560px">
+              <div style="font-size:32px; font-weight:600; line-height:1.1; letter-spacing:-.02em; color:#111111">Juliet's favorites</div>
+              <div style="font-size:14px; line-height:1.55; color:#8A8A8E; text-wrap:pretty">Slow films, one long-running sitcom I rewatch every winter, and the eleven restaurants in Lisbon and Oakland I send everyone to.</div>
+              <div style="display:flex; gap:18px; font-size:13px; color:#8A8A8E; margin-top:2px">
+                <span>34 favorites</span><span>12 reviews</span><span>5 lists</span>
+              </div>
+            </div>
+          </div>
+
+          <div style="display:flex; flex-direction:column; gap:16px">
+            <div style="display:flex; align-items:baseline; justify-content:space-between">
+              <span style="font-size:15px; font-weight:500; color:#111111">Movies</span>
+              <span style="font-size:13px; color:#8A8A8E">14</span>
+            </div>
+            <div style="display:grid; grid-template-columns:{{ gridCols }}; gap:20px">
+              <sc-for list="{{ movies }}" as="m" hint-placeholder-count="6">
+                <div style="display:flex; flex-direction:column; gap:10px">
+                  <div style="aspect-ratio:2/3; border-radius:16px; background:repeating-linear-gradient(135deg,#EDECE9 0 7px,#F4F3F0 7px 14px); box-shadow:0 1px 3px rgba(0,0,0,.06); display:flex; align-items:flex-end; padding:10px">
+                    <span style="font:10px ui-monospace,Menlo,monospace; color:#8A8A8E">poster</span>
+                  </div>
+                  <div>
+                    <div style="font-size:15px; font-weight:500; color:#111111; white-space:nowrap; overflow:hidden; text-overflow:ellipsis">{{ m.title }}</div>
+                    <div style="font-size:13px; color:#8A8A8E; margin-top:3px">{{ m.meta }}</div>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+
+          <div style="display:flex; flex-direction:column; gap:16px">
+            <div style="display:flex; align-items:baseline; justify-content:space-between">
+              <span style="font-size:15px; font-weight:500; color:#111111">TV Shows</span>
+              <span style="font-size:13px; color:#8A8A8E">9</span>
+            </div>
+            <div style="display:grid; grid-template-columns:{{ gridCols }}; gap:20px">
+              <sc-for list="{{ shows }}" as="s" hint-placeholder-count="6">
+                <div style="display:flex; flex-direction:column; gap:10px">
+                  <div style="aspect-ratio:2/3; border-radius:16px; background:repeating-linear-gradient(135deg,#EDECE9 0 7px,#F4F3F0 7px 14px); box-shadow:0 1px 3px rgba(0,0,0,.06); display:flex; align-items:flex-end; padding:10px">
+                    <span style="font:10px ui-monospace,Menlo,monospace; color:#8A8A8E">key art</span>
+                  </div>
+                  <div>
+                    <div style="font-size:15px; font-weight:500; color:#111111; white-space:nowrap; overflow:hidden; text-overflow:ellipsis">{{ s.title }}</div>
+                    <div style="font-size:13px; color:#8A8A8E; margin-top:3px">{{ s.meta }}</div>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+
+          <div style="display:flex; flex-direction:column; gap:16px">
+            <div style="display:flex; align-items:baseline; justify-content:space-between">
+              <span style="font-size:15px; font-weight:500; color:#111111">Restaurants</span>
+              <span style="font-size:13px; color:#8A8A8E">11</span>
+            </div>
+            <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:20px">
+              <sc-for list="{{ restaurants }}" as="r" hint-placeholder-count="3">
+                <div style="background:#FFFFFF; border-radius:16px; padding:12px; display:flex; flex-direction:column; gap:12px; box-shadow:0 1px 3px rgba(0,0,0,.06)">
+                  <div style="aspect-ratio:4/3; border-radius:12px; background:repeating-linear-gradient(135deg,#EDECE9 0 7px,#F4F3F0 7px 14px); display:flex; align-items:flex-end; padding:10px">
+                    <span style="font:10px ui-monospace,Menlo,monospace; color:#8A8A8E">restaurant photo</span>
+                  </div>
+                  <div style="padding:0 4px 6px">
+                    <div style="font-size:15px; font-weight:500; color:#111111; white-space:nowrap; overflow:hidden; text-overflow:ellipsis">{{ r.title }}</div>
+                    <div style="font-size:13px; color:#8A8A8E; margin-top:3px">{{ r.meta }}</div>
+                    <div style="font-size:13px; color:#8A8A8E; margin-top:8px; line-height:1.5">{{ r.note }}</div>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+
+          <div style="display:flex; flex-direction:column; gap:18px">
+            <span style="font-size:15px; font-weight:500; color:#111111">Recent reviews</span>
+            <div style="display:flex; flex-direction:column">
+              <sc-for list="{{ reviews }}" as="v" hint-placeholder-count="3">
+                <div style="display:flex; gap:18px; padding:20px 0; border-bottom:1px solid #E8E7E4">
+                  <div style="width:56px; aspect-ratio:2/3; flex:none; border-radius:10px; background:repeating-linear-gradient(135deg,#EDECE9 0 7px,#F4F3F0 7px 14px)"></div>
+                  <div style="display:flex; flex-direction:column; gap:6px">
+                    <div style="display:flex; gap:10px; align-items:baseline">
+                      <span style="font-size:15px; font-weight:500; color:#111111">{{ v.title }}</span>
+                      <span style="font-size:13px; color:#8A8A8E">{{ v.meta }}</span>
+                    </div>
+                    <sc-if value="{{ showQuotes }}" hint-placeholder-val="{{ true }}">
+                      <div style="font-size:14px; line-height:1.55; color:#8A8A8E; max-width:640px; text-wrap:pretty">{{ v.quote }}</div>
+                    </sc-if>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+
+          <div style="display:grid; grid-template-columns:1.4fr 1fr; gap:40px">
+            <div style="display:flex; flex-direction:column; gap:16px">
+              <div style="display:flex; align-items:baseline; justify-content:space-between">
+                <span style="font-size:15px; font-weight:500; color:#111111">Saved for later</span>
+                <span style="font-size:13px; color:#8A8A8E">18</span>
+              </div>
+              <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:14px">
+                <sc-for list="{{ saved }}" as="k" hint-placeholder-count="5">
+                  <div style="display:flex; flex-direction:column; gap:8px">
+                    <div style="aspect-ratio:4/3; border-radius:12px; background:repeating-linear-gradient(135deg,#EDECE9 0 7px,#F4F3F0 7px 14px)"></div>
+                    <div>
+                      <div style="font-size:13px; color:#111111; white-space:nowrap; overflow:hidden; text-overflow:ellipsis">{{ k.title }}</div>
+                      <div style="font-size:12px; color:#8A8A8E; margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis">{{ k.meta }}</div>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:16px">
+              <span style="font-size:15px; font-weight:500; color:#111111">Lists</span>
+              <div style="display:flex; flex-direction:column; gap:2px">
+                <sc-for list="{{ lists }}" as="l" hint-placeholder-count="4">
+                  <div style="display:flex; align-items:center; justify-content:space-between; padding:14px 0; border-bottom:1px solid #E8E7E4">
+                    <div style="display:flex; flex-direction:column; gap:3px">
+                      <span style="font-size:15px; font-weight:500; color:#111111">{{ l.name }}</span>
+                      <span style="font-size:13px; color:#8A8A8E">{{ l.meta }}</span>
+                    </div>
+                    <span style="font-size:13px; color:#8A8A8E">{{ l.count }}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= 1b — Public profile, sticky rail ================= -->
+    <div id="1b" style="width:1080px; display:flex; flex-direction:column; gap:14px">
+      <div style="display:flex; align-items:center; gap:10px">
+        <span style="display:inline-flex; align-items:center; justify-content:center; min-width:26px; height:26px; padding:0 9px; border-radius:13px; background:#111111; color:#FFFFFF; font-size:12px; font-weight:600">1b</span>
+        <span style="font-size:14px; color:#111111; font-weight:500">Public profile — identity rail, scrolling strips</span>
+      </div>
+
+      <div style="background:#F7F6F4; border-radius:24px; overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,.06); display:grid; grid-template-columns:320px 1fr">
+        <div style="padding:40px 32px; border-right:1px solid #E8E7E4; display:flex; flex-direction:column; gap:28px">
+          <span style="font-size:15px; font-weight:600; color:#111111">Curata</span>
+          <div style="display:flex; flex-direction:column; gap:16px">
+            <div style="width:72px; height:72px; border-radius:36px; background:repeating-linear-gradient(135deg,#EDECE9 0 7px,#F4F3F0 7px 14px); display:flex; align-items:center; justify-content:center; font:10px ui-monospace,Menlo,monospace; color:#8A8A8E">photo</div>
+            <div style="display:flex; flex-direction:column; gap:8px">
+              <div style="font-size:28px; font-weight:600; line-height:1.1; letter-spacing:-.02em; color:#111111">Juliet Mbeki</div>
+              <div style="font-size:13px; color:#8A8A8E">Oakland · curata.co/juliet</div>
+            </div>
+            <div style="font-size:14px; line-height:1.55; color:#8A8A8E; text-wrap:pretty">Slow films, one sitcom I rewatch every winter, and the restaurants I actually send people to.</div>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:1px">
+            <sc-for list="{{ nav }}" as="n" hint-placeholder-count="5">
+              <div style="display:flex; align-items:center; justify-content:space-between; padding:11px 0; border-bottom:1px solid #E8E7E4">
+                <span style="font-size:15px; color:#111111">{{ n.label }}</span>
+                <span style="font-size:13px; color:#8A8A8E">{{ n.count }}</span>
+              </div>
+            </sc-for>
+          </div>
+          <div style="display:flex; gap:8px; margin-top:auto">
+            <span style="padding:11px 18px; border-radius:24px; background:#111111; color:#FFFFFF; font-size:13px; font-weight:500">Share page</span>
+            <span style="padding:11px 18px; border-radius:24px; background:#FFFFFF; color:#111111; font-size:13px; font-weight:500; border:1px solid #E8E7E4">Follow</span>
+          </div>
+        </div>
+
+        <div style="padding:40px 36px 52px; display:flex; flex-direction:column; gap:40px; min-width:0">
+          <div style="display:flex; flex-direction:column; gap:16px; min-width:0">
+            <div style="display:flex; align-items:baseline; justify-content:space-between">
+              <span style="font-size:15px; font-weight:500; color:#111111">Movies</span>
+              <span style="font-size:13px; color:#8A8A8E">Scroll →</span>
+            </div>
+            <div style="display:flex; gap:16px; overflow-x:auto; padding-bottom:6px">
+              <sc-for list="{{ movies }}" as="m" hint-placeholder-count="6">
+                <div style="width:150px; flex:none; display:flex; flex-direction:column">
+                  <div style="aspect-ratio:2/3; border-radius:16px; background:repeating-linear-gradient(135deg,#EDECE9 0 7px,#F4F3F0 7px 14px); position:relative; display:flex; align-items:flex-end; padding:12px; box-shadow:0 1px 3px rgba(0,0,0,.06)">
+                    <div style="position:absolute; left:0; right:0; bottom:0; height:60%; border-radius:16px; background:linear-gradient(to top, rgba(0,0,0,.55), rgba(0,0,0,0))"></div>
+                    <div style="position:relative; display:flex; flex-direction:column; gap:2px">
+                      <span style="font-size:15px; font-weight:500; color:#FFFFFF; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:120px">{{ m.title }}</span>
+                      <span style="font-size:13px; color:rgba(255,255,255,.78)">{{ m.year }}</span>
+                    </div>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+
+          <div style="display:flex; flex-direction:column; gap:16px; min-width:0">
+            <div style="display:flex; align-items:baseline; justify-content:space-between">
+              <span style="font-size:15px; font-weight:500; color:#111111">TV Shows</span>
+              <span style="font-size:13px; color:#8A8A8E">Scroll →</span>
+            </div>
+            <div style="display:flex; gap:16px; overflow-x:auto; padding-bottom:6px">
+              <sc-for list="{{ shows }}" as="s" hint-placeholder-count="6">
+                <div style="width:150px; flex:none; display:flex; flex-direction:column">
+                  <div style="aspect-ratio:2/3; border-radius:16px; background:repeating-linear-gradient(135deg,#EDECE9 0 7px,#F4F3F0 7px 14px); position:relative; display:flex; align-items:flex-end; padding:12px; box-shadow:0 1px 3px rgba(0,0,0,.06)">
+                    <div style="position:absolute; left:0; right:0; bottom:0; height:60%; border-radius:16px; background:linear-gradient(to top, rgba(0,0,0,.55), rgba(0,0,0,0))"></div>
+                    <div style="position:relative; display:flex; flex-direction:column; gap:2px">
+                      <span style="font-size:15px; font-weight:500; color:#FFFFFF; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:120px">{{ s.title }}</span>
+                      <span style="font-size:13px; color:rgba(255,255,255,.78)">{{ s.year }}</span>
+                    </div>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+
+          <div style="display:flex; flex-direction:column; gap:16px">
+            <span style="font-size:15px; font-weight:500; color:#111111">Restaurants</span>
+            <div style="display:flex; flex-direction:column">
+              <sc-for list="{{ restaurants }}" as="r" hint-placeholder-count="4">
+                <div style="display:flex; gap:16px; align-items:center; padding:14px 0; border-bottom:1px solid #E8E7E4">
+                  <div style="width:104px; aspect-ratio:4/3; flex:none; border-radius:12px; background:repeating-linear-gradient(135deg,#EDECE9 0 7px,#F4F3F0 7px 14px)"></div>
+                  <div style="display:flex; flex-direction:column; gap:4px; min-width:0">
+                    <span style="font-size:15px; font-weight:500; color:#111111">{{ r.title }}</span>
+                    <span style="font-size:13px; color:#8A8A8E">{{ r.meta }}</span>
+                    <span style="font-size:14px; color:#8A8A8E; line-height:1.5">{{ r.note }}</span>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:36px">
+            <div style="display:flex; flex-direction:column; gap:16px">
+              <span style="font-size:15px; font-weight:500; color:#111111">Recent reviews</span>
+              <div style="display:flex; flex-direction:column; gap:20px">
+                <sc-for list="{{ reviews }}" as="v" hint-placeholder-count="3">
+                  <div style="background:#FFFFFF; border-radius:16px; padding:18px; display:flex; flex-direction:column; gap:8px; box-shadow:0 1px 3px rgba(0,0,0,.06)">
+                    <div style="display:flex; gap:10px; align-items:baseline">
+                      <span style="font-size:15px; font-weight:500; color:#111111">{{ v.title }}</span>
+                      <span style="font-size:13px; color:#8A8A8E">{{ v.meta }}</span>
+                    </div>
+                    <sc-if value="{{ showQuotes }}" hint-placeholder-val="{{ true }}">
+                      <div style="font-size:14px; line-height:1.55; color:#8A8A8E; text-wrap:pretty">{{ v.quote }}</div>
+                    </sc-if>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:28px">
+              <div style="display:flex; flex-direction:column; gap:16px">
+                <span style="font-size:15px; font-weight:500; color:#111111">Saved</span>
+                <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:12px">
+                  <sc-for list="{{ saved }}" as="k" hint-placeholder-count="4">
+                    <div style="aspect-ratio:4/3; border-radius:12px; background:repeating-linear-gradient(135deg,#EDECE9 0 7px,#F4F3F0 7px 14px)"></div>
+                  </sc-for>
+                </div>
+              </div>
+              <div style="display:flex; flex-direction:column; gap:16px">
+                <span style="font-size:15px; font-weight:500; color:#111111">Lists</span>
+                <div style="display:flex; flex-direction:column">
+                  <sc-for list="{{ lists }}" as="l" hint-placeholder-count="4">
+                    <div style="display:flex; align-items:center; justify-content:space-between; padding:12px 0; border-bottom:1px solid #E8E7E4">
+                      <span style="font-size:15px; color:#111111">{{ l.name }}</span>
+                      <span style="font-size:13px; color:#8A8A8E">{{ l.count }}</span>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= 1c — Landing, profile-beside-pitch ================= -->
+    <div id="1c" style="width:1080px; display:flex; flex-direction:column; gap:14px">
+      <div style="display:flex; align-items:center; gap:10px">
+        <span style="display:inline-flex; align-items:center; justify-content:center; min-width:26px; height:26px; padding:0 9px; border-radius:13px; background:#111111; color:#FFFFFF; font-size:12px; font-weight:600">1c</span>
+        <span style="font-size:14px; color:#111111; font-weight:500">Landing — pitch left, live profile right</span>
+      </div>
+
+      <div style="background:#F7F6F4; border-radius:24px; overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,.06)">
+        <div style="display:flex; align-items:center; justify-content:space-between; padding:22px 40px">
+          <span style="font-size:15px; font-weight:600; color:#111111">Curata</span>
+          <div style="display:flex; gap:20px; align-items:center; font-size:13px; color:#8A8A8E">
+            <span>Examples</span><span>Log in</span>
+            <span style="padding:9px 18px; border-radius:24px; background:#111111; color:#FFFFFF; font-weight:500">{{ ctaLabel }}</span>
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:48px; padding:56px 40px 64px; align-items:center">
+          <div style="display:flex; flex-direction:column; gap:24px">
+            <div style="font-size:13px; color:#8A8A8E">One URL, three sections</div>
+            <div style="font-size:44px; line-height:1.08; letter-spacing:-.03em; font-weight:600; color:#111111; text-wrap:pretty">The page you send when someone asks what to watch or where to eat.</div>
+            <div style="font-size:15px; line-height:1.6; color:#8A8A8E; max-width:420px; text-wrap:pretty">No feed, no ratings to maintain, no algorithm. Your favorite films, shows and restaurants — plus the eleven-word reviews you'd text a friend.</div>
+            <div style="display:flex; align-items:center; gap:10px; background:#111111; border-radius:32px; padding:8px 8px 8px 22px; max-width:420px">
+              <span style="font:14px ui-monospace,Menlo,monospace; color:rgba(255,255,255,.55)">curata.co/</span>
+              <span style="flex:1; font-size:15px; color:#FFFFFF">yourname</span>
+              <span style="padding:11px 20px; border-radius:24px; background:#FFFFFF; color:#111111; font-size:13px; font-weight:500">Claim</span>
+            </div>
+            <div style="font-size:13px; color:#8A8A8E">Free while we're in beta · 4,100 pages claimed</div>
+          </div>
+
+          <div style="background:#FFFFFF; border-radius:20px; padding:28px; display:flex; flex-direction:column; gap:24px; box-shadow:0 1px 3px rgba(0,0,0,.06)">
+            <div style="display:flex; align-items:center; justify-content:space-between">
+              <span style="font:12px ui-monospace,Menlo,monospace; color:#8A8A8E">curata.co/juliet</span>
+              <span style="font-size:13px; color:#8A8A8E">Live example</span>
+            </div>
+            <div style="display:flex; gap:16px; align-items:center">
+              <div style="width:56px; height:56px; border-radius:28px; flex:none; background:repeating-linear-gradient(135deg,#EDECE9 0 7px,#F4F3F0 7px 14px)"></div>
+              <div style="display:flex; flex-direction:column; gap:4px">
+                <span style="font-size:22px; font-weight:600; letter-spacing:-.02em; color:#111111">Juliet's favorites</span>
+                <span style="font-size:13px; color:#8A8A8E">34 favorites · 12 reviews · 5 lists</span>
+              </div>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:12px">
+              <span style="font-size:15px; font-weight:500; color:#111111">Movies</span>
+              <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:12px">
+                <sc-for list="{{ moviesTop }}" as="m" hint-placeholder-count="4">
+                  <div style="display:flex; flex-direction:column; gap:8px">
+                    <div style="aspect-ratio:2/3; border-radius:12px; background:repeating-linear-gradient(135deg,#EDECE9 0 7px,#F4F3F0 7px 14px)"></div>
+                    <span style="font-size:13px; color:#8A8A8E; white-space:nowrap; overflow:hidden; text-overflow:ellipsis">{{ m.title }}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:12px">
+              <span style="font-size:15px; font-weight:500; color:#111111">Restaurants</span>
+              <div style="display:flex; flex-direction:column">
+                <sc-for list="{{ restaurantsTop }}" as="r" hint-placeholder-count="2">
+                  <div style="display:flex; gap:14px; align-items:center; padding:12px 0; border-bottom:1px solid #E8E7E4">
+                    <div style="width:76px; aspect-ratio:4/3; flex:none; border-radius:10px; background:repeating-linear-gradient(135deg,#EDECE9 0 7px,#F4F3F0 7px 14px)"></div>
+                    <div style="display:flex; flex-direction:column; gap:3px">
+                      <span style="font-size:15px; font-weight:500; color:#111111">{{ r.title }}</span>
+                      <span style="font-size:13px; color:#8A8A8E">{{ r.meta }}</span>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:8px">
+              <span style="font-size:15px; font-weight:500; color:#111111">Latest review</span>
+              <span style="font-size:14px; line-height:1.55; color:#8A8A8E; text-wrap:pretty">{{ heroQuote }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:32px; padding:0 40px 64px">
+          <sc-for list="{{ steps }}" as="p" hint-placeholder-count="3">
+            <div style="display:flex; flex-direction:column; gap:8px; padding-top:24px; border-top:1px solid #E8E7E4">
+              <span style="font:12px ui-monospace,Menlo,monospace; color:#8A8A8E">{{ p.n }}</span>
+              <span style="font-size:15px; font-weight:500; color:#111111">{{ p.title }}</span>
+              <span style="font-size:14px; line-height:1.55; color:#8A8A8E; text-wrap:pretty">{{ p.body }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= 1d — Landing, poster wall ================= -->
+    <div id="1d" style="width:1080px; display:flex; flex-direction:column; gap:14px">
+      <div style="display:flex; align-items:center; gap:10px">
+        <span style="display:inline-flex; align-items:center; justify-content:center; min-width:26px; height:26px; padding:0 9px; border-radius:13px; background:#111111; color:#FFFFFF; font-size:12px; font-weight:600">1d</span>
+        <span style="font-size:14px; color:#111111; font-weight:500">Landing — one real profile as the hero wall</span>
+      </div>
+
+      <div style="background:#F7F6F4; border-radius:24px; overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,.06)">
+        <div style="display:flex; align-items:center; justify-content:space-between; padding:22px 40px">
+          <span style="font-size:15px; font-weight:600; color:#111111">Curata</span>
+          <div style="display:flex; gap:20px; align-items:center; font-size:13px; color:#8A8A8E">
+            <span>Log in</span>
+            <span style="padding:9px 18px; border-radius:24px; background:#111111; color:#FFFFFF; font-weight:500">{{ ctaLabel }}</span>
+          </div>
+        </div>
+
+        <div style="padding:48px 40px 36px; display:flex; flex-direction:column; align-items:center; gap:20px; text-align:center">
+          <div style="font-size:52px; line-height:1.05; letter-spacing:-.03em; font-weight:600; color:#111111; max-width:760px; text-wrap:pretty">This is Juliet's taste, on one page.</div>
+          <div style="font-size:15px; line-height:1.6; color:#8A8A8E; max-width:520px; text-wrap:pretty">34 favorites, 12 short reviews, 5 lists. Nothing else. Curata gives everyone a page like it — yours takes about nine minutes.</div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:repeat(9,1fr); gap:10px; padding:0 40px">
+          <sc-for list="{{ wall }}" as="w" hint-placeholder-count="18">
+            <div style="aspect-ratio:2/3; border-radius:10px; background:repeating-linear-gradient(135deg,#EDECE9 0 7px,#F4F3F0 7px 14px)"></div>
+          </sc-for>
+        </div>
+
+        <div style="display:flex; justify-content:center; padding:36px 40px 8px">
+          <div style="display:flex; align-items:center; gap:12px; background:#111111; border-radius:32px; padding:8px 8px 8px 24px">
+            <span style="font-size:15px; color:rgba(255,255,255,.62)">curata.co/</span>
+            <span style="font-size:15px; color:#FFFFFF; min-width:110px">yourname</span>
+            <span style="padding:12px 22px; border-radius:24px; background:#FFFFFF; color:#111111; font-size:13px; font-weight:500">Claim your page</span>
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:40px; padding:56px 40px 64px; align-items:start">
+          <div style="display:flex; flex-direction:column; gap:28px">
+            <div style="font-size:28px; line-height:1.15; letter-spacing:-.02em; font-weight:600; color:#111111; text-wrap:pretty">A review here is one sentence, not a star rating.</div>
+            <div style="display:flex; flex-direction:column">
+              <sc-for list="{{ reviews }}" as="v" hint-placeholder-count="3">
+                <div style="display:flex; gap:16px; padding:18px 0; border-bottom:1px solid #E8E7E4">
+                  <div style="width:48px; aspect-ratio:2/3; flex:none; border-radius:10px; background:repeating-linear-gradient(135deg,#EDECE9 0 7px,#F4F3F0 7px 14px)"></div>
+                  <div style="display:flex; flex-direction:column; gap:5px">
+                    <div style="display:flex; gap:10px; align-items:baseline">
+                      <span style="font-size:15px; font-weight:500; color:#111111">{{ v.title }}</span>
+                      <span style="font-size:13px; color:#8A8A8E">{{ v.meta }}</span>
+                    </div>
+                    <span style="font-size:14px; line-height:1.55; color:#8A8A8E; text-wrap:pretty">{{ v.quote }}</span>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+
+          <div style="display:flex; flex-direction:column; gap:24px">
+            <div style="background:#FFFFFF; border-radius:20px; padding:24px; display:flex; flex-direction:column; gap:18px; box-shadow:0 1px 3px rgba(0,0,0,.06)">
+              <span style="font-size:15px; font-weight:500; color:#111111">Juliet's lists</span>
+              <div style="display:flex; flex-direction:column">
+                <sc-for list="{{ lists }}" as="l" hint-placeholder-count="4">
+                  <div style="display:flex; align-items:center; justify-content:space-between; padding:13px 0; border-bottom:1px solid #E8E7E4">
+                    <div style="display:flex; flex-direction:column; gap:3px">
+                      <span style="font-size:15px; color:#111111">{{ l.name }}</span>
+                      <span style="font-size:13px; color:#8A8A8E">{{ l.meta }}</span>
+                    </div>
+                    <span style="font-size:13px; color:#8A8A8E">{{ l.count }}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:16px">
+              <span style="font-size:15px; font-weight:500; color:#111111">Where she eats</span>
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px">
+                <sc-for list="{{ restaurantsTop }}" as="r" hint-placeholder-count="2">
+                  <div style="display:flex; flex-direction:column; gap:10px">
+                    <div style="aspect-ratio:4/3; border-radius:14px; background:repeating-linear-gradient(135deg,#EDECE9 0 7px,#F4F3F0 7px 14px); display:flex; align-items:flex-end; padding:10px">
+                      <span style="font:10px ui-monospace,Menlo,monospace; color:#8A8A8E">restaurant photo</span>
+                    </div>
+                    <div>
+                      <div style="font-size:15px; font-weight:500; color:#111111">{{ r.title }}</div>
+                      <div style="font-size:13px; color:#8A8A8E; margin-top:3px">{{ r.meta }}</div>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;showQuotes&quot;: { &quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Content&quot; },
+  &quot;ctaLabel&quot;: { &quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;Claim your page&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Content&quot; },
+  &quot;posterColumns&quot;: { &quot;editor&quot;: &quot;range&quot;, &quot;default&quot;: 6, &quot;min&quot;: 4, &quot;max&quot;: 8, &quot;step&quot;: 1, &quot;tsType&quot;: &quot;number&quot;, &quot;section&quot;: &quot;Layout&quot; }
+}">
+class Component extends DCLogic {
+  renderVals() {
+    const movies = [
+      { title: "Past Lives", year: "2023", meta: "2023 · Celine Song" },
+      { title: "In the Mood for Love", year: "2000", meta: "2000 · Wong Kar-wai" },
+      { title: "Aftersun", year: "2022", meta: "2022 · Charlotte Wells" },
+      { title: "Paris, Texas", year: "1984", meta: "1984 · Wim Wenders" },
+      { title: "Perfect Days", year: "2023", meta: "2023 · Wim Wenders" },
+      { title: "The Farewell", year: "2019", meta: "2019 · Lulu Wang" }
+    ];
+    const shows = [
+      { title: "The Bear", year: "2022–", meta: "2022– · FX" },
+      { title: "Detroiters", year: "2017", meta: "2017 · Comedy Central" },
+      { title: "Fleabag", year: "2016", meta: "2016 · BBC Three" },
+      { title: "Chef's Table", year: "2015–", meta: "2015– · Netflix" },
+      { title: "Somebody Somewhere", year: "2022", meta: "2022 · HBO" },
+      { title: "Terrace House", year: "2015", meta: "2015 · Fuji TV" }
+    ];
+    const restaurants = [
+      { title: "Cervejaria Ramiro", meta: "★ 4.8 · $$ · Seafood · Lisbon", note: "Go at 4pm, order the carabineiros, skip the bread guilt." },
+      { title: "Snail Bar", meta: "★ 4.7 · $$ · Wine bar · Oakland", note: "Twelve seats, one hot plate, the best uni toast I've had." },
+      { title: "Taqueria El Paisa", meta: "★ 4.6 · $ · Tacos · Oakland", note: "Al pastor after 10pm, cash only, eat standing up." },
+      { title: "Tasca da Esquina", meta: "★ 4.5 · $$$ · Portuguese · Lisbon", note: "The tasting menu is fine — sit at the counter and improvise." }
+    ];
+    const reviews = [
+      { title: "Perfect Days", meta: "Film · 2 days ago", quote: "A man cleans toilets and reads paperbacks and I cried twice. Nothing happens, beautifully." },
+      { title: "The Bear, S3", meta: "TV · last week", quote: "Season three is all vibes and no plot, and I still watched it in one sitting." },
+      { title: "Snail Bar", meta: "Restaurant · 3 weeks ago", quote: "Went for one glass, stayed for four courses. Ask what came in that morning." }
+    ];
+    const saved = [
+      { title: "O Frade", meta: "Portuguese · Lisbon" },
+      { title: "Al's Place", meta: "Californian · SF" },
+      { title: "Kabawa", meta: "Caribbean · Oakland" },
+      { title: "Cervejaria Trindade", meta: "Seafood · Lisbon" },
+      { title: "Rosalind", meta: "Wine bar · Oakland" }
+    ];
+    const lists = [
+      { name: "Films for a rainy Sunday", meta: "Updated in June", count: "11" },
+      { name: "Lisbon, 3 days", meta: "Restaurants + one bakery", count: "9" },
+      { name: "Comfort rewatches", meta: "Nothing after 2012", count: "7" },
+      { name: "Recommended by Dad", meta: "Mostly westerns", count: "6" }
+    ];
+    return {
+      movies, shows, restaurants, reviews, saved, lists,
+      moviesTop: movies.slice(0, 4),
+      restaurantsTop: restaurants.slice(0, 2),
+      wall: Array.from({ length: 18 }, (_, i) => i),
+      nav: [
+        { label: "Movies", count: "14" }, { label: "TV Shows", count: "9" },
+        { label: "Restaurants", count: "11" }, { label: "Reviews", count: "12" },
+        { label: "Lists", count: "5" }
+      ],
+      steps: [
+        { n: "01", title: "Pick your favorites", body: "Search once, tap the poster. Thirty-four is a lot; twelve is enough." },
+        { n: "02", title: "Write a sentence", body: "Reviews are capped short on purpose — the length of a text to a friend." },
+        { n: "03", title: "Send the link", body: "One URL, no app to install, works when your friend is standing outside the restaurant." }
+      ],
+      heroQuote: "Perfect Days — a man cleans toilets and reads paperbacks and I cried twice.",
+      showQuotes: this.props.showQuotes ?? true,
+      ctaLabel: this.props.ctaLabel ?? "Claim your page",
+      gridCols: "repeat(" + (this.props.posterColumns ?? 6) + ", 1fr)"
+    };
+  }
+}
+</script>
+</body>
+</html>
