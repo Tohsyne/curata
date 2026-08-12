@@ -19,7 +19,7 @@ function ClaimForm() {
   const callbackError = searchParams.get("error");
 
   const [email, setEmail] = useState("");
-  const [username, setUsername] = useState("");
+  const [username, setUsername] = useState(searchParams.get("username")?.toLowerCase() ?? "");
   const [status, setStatus] = useState<Status>("idle");
   const [errorMessage, setErrorMessage] = useState(
     callbackError ? (CALLBACK_ERRORS[callbackError] ?? "Something went wrong — try again.") : ""
